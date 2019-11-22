@@ -271,7 +271,7 @@ function! rhubarb_gogs#FugitiveUrl(...) abort
     let commit = opts.commit
   endif
   if get(opts, 'type', '') ==# 'tree' || opts.path =~# '/$'
-    let url = substitute(root . '/tree/' . commit . '/' . path, '/$', '', 'g')
+    let url = substitute(root . '/src/' . commit . '/' . path, '/$', '', 'g')
   elseif get(opts, 'type', '') ==# 'blob' || opts.path =~# '[^/]$'
     let escaped_commit = substitute(commit, '#', '%23', 'g')
     let url = root . '/src/' . escaped_commit . '/' . path
