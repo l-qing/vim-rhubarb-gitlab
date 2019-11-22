@@ -1,6 +1,6 @@
-# rhubarb.vim
+# rhubarb_gogs.vim
 
-If [fugitive.vim][] is the Git, rhubarb.vim is the Hub.  Here's the full list
+If [fugitive.vim][] is the Git, rhubarb_gogs.vim is the Hub.  Here's the full list
 of features:
 
 * Enables `:Gbrowse` from fugitive.vim to open GitHub URLs.
@@ -22,8 +22,8 @@ installing [pathogen.vim](https://github.com/tpope/vim-pathogen), and
 then simply copy and paste:
 
     cd ~/.vim/bundle
-    git clone https://github.com/tpope/vim-rhubarb.git
-    vim -u NONE -c "helptags vim-rhubarb/doc" -c q
+    git clone https://github.com/tpope/vim-rhubarb_gogs.git
+    vim -u NONE -c "helptags vim-rhubarb_gogs/doc" -c q
 
 You'll also need [fugitive.vim][].
 
@@ -35,7 +35,7 @@ with repo permissions and add it to your `.netrc`:
     echo 'machine api.github.com login <user> password <token>' >> ~/.netrc
 
 If you are using GitHub Enterprise, repeat this step for each domain (omit the
-`api.` portion). You'll also need to tell Rhubarb the root URLs:
+`api.` portion). You'll also need to tell rhubarb_gogs the root URLs:
 
     let g:github_enterprise_urls = ['https://example.com']
 
@@ -47,8 +47,8 @@ If you are using GitHub Enterprise, repeat this step for each domain (omit the
 
 ## Self-Promotion
 
-Like rhubarb.vim? Follow the repository on
-[GitHub](https://github.com/tpope/vim-rhubarb).  And if
+Like rhubarb_gogs.vim? Follow the repository on
+[GitHub](https://github.com/tpope/vim-rhubarb_gogs).  And if
 you're feeling especially charitable, follow [tpope](http://tpo.pe/) on
 [Twitter](http://twitter.com/tpope) and
 [GitHub](https://github.com/tpope).

@@ -1,10 +1,10 @@
-" rhubarb.vim - fugitive.vim extension for GitHub
+" rhubarb_gogs.vim - fugitive.vim extension for Gogs
 " Maintainer:   Tim Pope <http://tpo.pe/>
 
-if exists("g:loaded_rhubarb") || v:version < 700 || &cp
+if exists("g:loaded_rhubarb_gogs") || v:version < 700 || &cp
   finish
 endif
-let g:loaded_rhubarb = 1
+let g:loaded_rhubarb_gogs = 1
 
 if !exists('g:dispatch_compilers')
   let g:dispatch_compilers = {}
@@ -28,18 +28,18 @@ function! s:Config() abort
   return filereadable(dir . '/config') ? readfile(dir . '/config') : []
 endfunction
 
-augroup rhubarb
+augroup rhubarb_gogs
   autocmd!
   autocmd User Fugitive
         \ if expand('%:p') =~# '\.git[\/].*MSG$' &&
         \   exists('+omnifunc') &&
         \   &omnifunc =~# '^\%(syntaxcomplete#Complete\)\=$' &&
         \   !empty(filter(s:Config(),
-        \     '!empty(rhubarb#HomepageForUrl(matchstr(v:val, ''^\s*url\s*=\s*"\=\zs\S*'')))')) |
-        \   setlocal omnifunc=rhubarb#Complete |
+        \     '!empty(rhubarb_gogs#HomepageForUrl(matchstr(v:val, ''^\s*url\s*=\s*"\=\zs\S*'')))')) |
+        \   setlocal omnifunc=rhubarb_gogs#Complete |
         \ endif
   autocmd BufEnter *
-        \ if expand('%') ==# '' && &previewwindow && pumvisible() && getbufvar('#', '&omnifunc') ==# 'rhubarb#omnifunc' |
+        \ if expand('%') ==# '' && &previewwindow && pumvisible() && getbufvar('#', '&omnifunc') ==# 'rhubarb_gogs#omnifunc' |
         \    setlocal nolist linebreak filetype=markdown |
         \ endif
   autocmd BufNewFile,BufRead *.git/{PULLREQ_EDIT,ISSUE_EDIT,RELEASE_EDIT}MSG
@@ -52,6 +52,6 @@ if !exists('g:fugitive_browse_handlers')
   let g:fugitive_browse_handlers = []
 endif
 
-if index(g:fugitive_browse_handlers, function('rhubarb#FugitiveUrl')) < 0
-  call insert(g:fugitive_browse_handlers, function('rhubarb#FugitiveUrl'))
+if index(g:fugitive_browse_handlers, function('rhubarb_gogs#FugitiveUrl')) < 0
+  call insert(g:fugitive_browse_handlers, function('rhubarb_gogs#FugitiveUrl'))
 endif
