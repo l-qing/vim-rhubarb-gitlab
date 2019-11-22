@@ -24,8 +24,8 @@ function! s:shellesc(arg) abort
 endfunction
 
 function! rhubarb_gogs#HomepageForUrl(url) abort
-  let domain_pattern = 'github\.com'
-  let domains = get(g:, 'github_enterprise_urls', get(g:, 'fugitive_github_domains', []))
+  let domain_pattern = 'gogs\.io'
+  let domains = get(g:, 'gogs_enterprise_urls', get(g:, 'fugitive_github_domains', []))
   call map(copy(domains), 'substitute(v:val, "/$", "", "")')
   for domain in domains
     let domain_pattern .= '\|' . escape(split(domain, '://')[-1], '.')

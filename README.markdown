@@ -3,12 +3,12 @@
 If [fugitive.vim][] is the Git, rhubarb_gogs.vim is the Hub.  Here's the full list
 of features:
 
-* Enables `:Gbrowse` from fugitive.vim to open GitHub URLs.
+* Enables `:Gbrowse` from fugitive.vim to open Gogs URLs.
 
 * Sets up `:Git` to use [`hub`](https://github.com/github/hub) if installed
   rather than `git`.
 
-* In commit messages, GitHub issues, issue URLs, and collaborators can be
+* In commit messages, Gogs issues, issue URLs, and collaborators can be
   omni-completed (`<C-X><C-O>`, see `:help compl-omni`).  This makes inserting
   those `Closes #123` remarks slightly easier than copying and pasting from
   the browser.
@@ -34,10 +34,10 @@ with repo permissions and add it to your `.netrc`:
 
     echo 'machine api.github.com login <user> password <token>' >> ~/.netrc
 
-If you are using GitHub Enterprise, repeat this step for each domain (omit the
+If you are using Gogs Enterprise, repeat this step for each domain (omit the
 `api.` portion). You'll also need to tell rhubarb_gogs the root URLs:
 
-    let g:github_enterprise_urls = ['https://example.com']
+    let g:gogs_enterprise_urls = ['https://example.com']
 
 ## FAQ
 
