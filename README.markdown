@@ -1,14 +1,14 @@
-# rhubarb_gogs.vim
+# rhubarb_gitlab.vim
 
-If [fugitive.vim][] is the Git, rhubarb_gogs.vim is the Hub.  Here's the full list
+If [fugitive.vim][] is the Git, rhubarb_gitlab.vim is the Hub.  Here's the full list
 of features:
 
-* Enables `:Gbrowse` from fugitive.vim to open Gogs URLs.
+* Enables `:Gbrowse` from fugitive.vim to open Gitlab URLs.
 
 * Sets up `:Git` to use [`hub`](https://github.com/github/hub) if installed
   rather than `git`.
 
-* In commit messages, Gogs issues, issue URLs, and collaborators can be
+* In commit messages, Gitlab issues, issue URLs, and collaborators can be
   omni-completed (`<C-X><C-O>`, see `:help compl-omni`).  This makes inserting
   those `Closes #123` remarks slightly easier than copying and pasting from
   the browser.
@@ -22,8 +22,8 @@ installing [pathogen.vim](https://github.com/tpope/vim-pathogen), and
 then simply copy and paste:
 
     cd ~/.vim/bundle
-    git clone https://github.com/tpope/vim-rhubarb_gogs.git
-    vim -u NONE -c "helptags vim-rhubarb_gogs/doc" -c q
+    git clone https://github.com/tpope/vim-rhubarb_gitlab.git
+    vim -u NONE -c "helptags vim-rhubarb_gitlab/doc" -c q
 
 You'll also need [fugitive.vim][].
 
@@ -34,10 +34,10 @@ with repo permissions and add it to your `.netrc`:
 
     echo 'machine api.github.com login <user> password <token>' >> ~/.netrc
 
-If you are using Gogs Enterprise, repeat this step for each domain (omit the
-`api.` portion). You'll also need to tell rhubarb_gogs the root URLs:
+If you are using Gitlab Enterprise, repeat this step for each domain (omit the
+`api.` portion). You'll also need to tell rhubarb_gitlab the root URLs:
 
-    let g:gogs_enterprise_urls = ['https://example.com']
+    let g:gitlab_enterprise_urls = ['https://example.com']
 
 ## FAQ
 
@@ -47,8 +47,8 @@ If you are using Gogs Enterprise, repeat this step for each domain (omit the
 
 ## Self-Promotion
 
-Like rhubarb_gogs.vim? Follow the repository on
-[GitHub](https://github.com/tpope/vim-rhubarb_gogs).  And if
+Like rhubarb_gitlab.vim? Follow the repository on
+[GitHub](https://github.com/tpope/vim-rhubarb_gitlab).  And if
 you're feeling especially charitable, follow [tpope](http://tpo.pe/) on
 [Twitter](http://twitter.com/tpope) and
 [GitHub](https://github.com/tpope).

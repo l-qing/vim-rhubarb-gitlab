@@ -1,15 +1,15 @@
-" Location: autoload/rhubarb_gogs.vim
+" Location: autoload/rhubarb_gitlab.vim
 " Author: Tim Pope <http://tpo.pe/>
 
-if exists('g:autoloaded_rhubarb_gogs')
+if exists('g:autoloaded_rhubarb_gitlab')
   finish
 endif
-let g:autoloaded_rhubarb_gogs = 1
+let g:autoloaded_rhubarb_gitlab = 1
 
 " Section: Utility
 
 function! s:throw(string) abort
-  let v:errmsg = 'rhubarb_gogs: '.a:string
+  let v:errmsg = 'rhubarb_gitlab: '.a:string
   throw v:errmsg
 endfunction
 
@@ -23,9 +23,9 @@ function! s:shellesc(arg) abort
   endif
 endfunction
 
-function! rhubarb_gogs#HomepageForUrl(url) abort
-  let domain_pattern = 'gogs\.io'
-  let domains = get(g:, 'gogs_enterprise_urls', get(g:, 'fugitive_github_domains', []))
+function! rhubarb_gitlab#HomepageForUrl(url) abort
+  let domain_pattern = 'gitlab\.com'
+  let domains = get(g:, 'gitlab_enterprise_urls', get(g:, 'fugitive_github_domains', []))
   call map(copy(domains), 'substitute(v:val, "/$", "", "")')
   for domain in domains
     let domain_pattern .= '\|' . escape(split(domain, '://')[-1], '.')
@@ -40,8 +40,8 @@ function! rhubarb_gogs#HomepageForUrl(url) abort
   endif
 endfunction
 
-function! rhubarb_gogs#homepage_for_url(url) abort
-  return rhubarb_gogs#HomepageForUrl(a:url)
+function! rhubarb_gitlab#homepage_for_url(url) abort
+  return rhubarb_gitlab#HomepageForUrl(a:url)
 endfunction
 
 function! s:repo_homepage() abort
@@ -53,7 +53,7 @@ function! s:repo_homepage() abort
   else
     let remote = fugitive#repo().config('remote.origin.url')
   endif
-  let homepage = rhubarb_gogs#HomepageForUrl(remote)
+  let homepage = rhubarb_gitlab#HomepageForUrl(remote)
   if !empty(homepage)
     let b:rhubarb_homepage = homepage
     return b:rhubarb_homepage
@@ -82,7 +82,7 @@ function! s:credentials() abort
   return g:github_user.':'.g:github_password
 endfunction
 
-function! rhubarb_gogs#JsonDecode(string) abort
+function! rhubarb_gitlab#JsonDecode(string) abort
   if exists('*json_decode')
     return json_decode(a:string)
   endif
@@ -97,18 +97,18 @@ function! rhubarb_gogs#JsonDecode(string) abort
   call s:throw("invalid JSON: ".a:string)
 endfunction
 
-function! rhubarb_gogs#JsonEncode(object) abort
+function! rhubarb_gitlab#JsonEncode(object) abort
   if exists('*json_encode')
     return json_encode(a:object)
   endif
   if type(a:object) == type('')
     return '"' . substitute(a:object, "[\001-\031\"\\\\]", '\=printf("\\u%04x", char2nr(submatch(0)))', 'g') . '"'
   elseif type(a:object) == type([])
-    return '['.join(map(copy(a:object), 'rhubarb_gogs#JsonEncode(v:val)'),', ').']'
+    return '['.join(map(copy(a:object), 'rhubarb_gitlab#JsonEncode(v:val)'),', ').']'
   elseif type(a:object) == type({})
     let pairs = []
     for key in keys(a:object)
-      call add(pairs, rhubarb_gogs#JsonEncode(key) . ': ' . rhubarb_gogs#JsonEncode(a:object[key]))
+      call add(pairs, rhubarb_gitlab#JsonEncode(key) . ': ' . rhubarb_gitlab#JsonEncode(a:object[key]))
     endfor
     return '{' . join(pairs, ', ') . '}'
   else
@@ -121,7 +121,7 @@ function! s:curl_arguments(path, ...) abort
   let args = ['-q', '--silent']
   call extend(args, ['-H', 'Accept: application/json'])
   call extend(args, ['-H', 'Content-Type: application/json'])
-  call extend(args, ['-A', 'rhubarb_gogs.vim'])
+  call extend(args, ['-A', 'rhubarb_gitlab.vim'])
   if get(options, 'auth', '') =~# ':'
     call extend(args, ['-u', options.auth])
   elseif has_key(options, 'auth')
@@ -142,7 +142,7 @@ function! s:curl_arguments(path, ...) abort
     call extend(args, ['-H', header])
   endfor
   if type(get(options, 'data', '')) != type('')
-    call extend(args, ['-d', rhubarb_gogs#JsonEncode(options.data)])
+    call extend(args, ['-d', rhubarb_gitlab#JsonEncode(options.data)])
   elseif has_key(options, 'data')
     call extend(args, ['-d', options.data])
   endif
@@ -150,7 +150,7 @@ function! s:curl_arguments(path, ...) abort
   return args
 endfunction
 
-function! rhubarb_gogs#Request(path, ...) abort
+function! rhubarb_gitlab#Request(path, ...) abort
   if !executable('curl')
     call s:throw('cURL is required')
   endif
@@ -173,45 +173,45 @@ function! rhubarb_gogs#Request(path, ...) abort
   if raw ==# ''
     return raw
   else
-    return rhubarb_gogs#JsonDecode(raw)
+    return rhubarb_gitlab#JsonDecode(raw)
   endif
 endfunction
 
-function! rhubarb_gogs#request(...) abort
-  return call('rhubarb_gogs#Request', a:000)
+function! rhubarb_gitlab#request(...) abort
+  return call('rhubarb_gitlab#Request', a:000)
 endfunction
 
-function! rhubarb_gogs#RepoRequest(...) abort
-  return rhubarb_gogs#Request('repos/%s' . (a:0 && a:1 !=# '' ? '/' . a:1 : ''), a:0 > 1 ? a:2 : {})
+function! rhubarb_gitlab#RepoRequest(...) abort
+  return rhubarb_gitlab#Request('repos/%s' . (a:0 && a:1 !=# '' ? '/' . a:1 : ''), a:0 > 1 ? a:2 : {})
 endfunction
 
-function! rhubarb_gogs#repo_request(...) abort
-  return call('rhubarb_gogs#RepoRequest', a:000)
+function! rhubarb_gitlab#repo_request(...) abort
+  return call('rhubarb_gitlab#RepoRequest', a:000)
 endfunction
 
 function! s:url_encode(str) abort
   return substitute(a:str, '[?@=&<>%#/:+[:space:]]', '\=submatch(0)==" "?"+":printf("%%%02X", char2nr(submatch(0)))', 'g')
 endfunction
 
-function! rhubarb_gogs#RepoSearch(type, q) abort
-  return rhubarb_gogs#Request('search/'.a:type.'?per_page=100&q=repo:%s'.s:url_encode(' '.a:q))
+function! rhubarb_gitlab#RepoSearch(type, q) abort
+  return rhubarb_gitlab#Request('search/'.a:type.'?per_page=100&q=repo:%s'.s:url_encode(' '.a:q))
 endfunction
 
-function! rhubarb_gogs#repo_search(...) abort
-  return call('rhubarb_gogs#RepoSearch', a:000)
+function! rhubarb_gitlab#repo_search(...) abort
+  return call('rhubarb_gitlab#RepoSearch', a:000)
 endfunction
 
 " Section: Issues
 
 let s:reference = '\<\%(\c\%(clos\|resolv\|referenc\)e[sd]\=\|\cfix\%(e[sd]\)\=\)\>'
-function! rhubarb_gogs#Complete(findstart, base) abort
+function! rhubarb_gitlab#Complete(findstart, base) abort
   if a:findstart
     let existing = matchstr(getline('.')[0:col('.')-1],s:reference.'\s\+\zs[^#/,.;]*$\|[#@[:alnum:]-]*$')
     return col('.')-1-strlen(existing)
   endif
   try
     if a:base =~# '^@'
-      return map(rhubarb_gogs#RepoRequest('collaborators'), '"@".v:val.login')
+      return map(rhubarb_gitlab#RepoRequest('collaborators'), '"@".v:val.login')
     else
       if a:base =~# '^#'
         let prefix = '#'
@@ -220,7 +220,7 @@ function! rhubarb_gogs#Complete(findstart, base) abort
         let prefix = s:repo_homepage().'/issues/'
         let query = a:base
       endif
-      let response = rhubarb_gogs#RepoSearch('issues', 'state:open '.query)
+      let response = rhubarb_gitlab#RepoSearch('issues', 'state:open '.query)
       if type(response) != type({})
         call s:throw('unknown error')
       elseif has_key(response, 'message')
@@ -230,23 +230,23 @@ function! rhubarb_gogs#Complete(findstart, base) abort
       endif
       return map(issues, '{"word": prefix.v:val.number, "abbr": "#".v:val.number, "menu": v:val.title, "info": substitute(v:val.body,"\\r","","g")}')
     endif
-  catch /^rhubarb_gogs:.*is not a GitHub repository/
+  catch /^rhubarb_gitlab:.*is not a GitHub repository/
     return []
-  catch /^\%(fugitive\|rhubarb_gogs\):/
+  catch /^\%(fugitive\|rhubarb_gitlab\):/
     echoerr v:errmsg
   endtry
 endfunction
 
-function! rhubarb_gogs#omnifunc(findstart, base) abort
-  return rhubarb_gogs#Complete(a:findstart, a:base)
+function! rhubarb_gitlab#omnifunc(findstart, base) abort
+  return rhubarb_gitlab#Complete(a:findstart, a:base)
 endfunction
 
 " Section: Fugitive :Gbrowse support
 
-function! rhubarb_gogs#FugitiveUrl(...) abort
+function! rhubarb_gitlab#FugitiveUrl(...) abort
   if a:0 == 1 || type(a:1) == type({})
     let opts = a:1
-    let root = rhubarb_gogs#HomepageForUrl(get(opts, 'remote', ''))
+    let root = rhubarb_gitlab#HomepageForUrl(get(opts, 'remote', ''))
   else
     return ''
   endif
@@ -271,10 +271,10 @@ function! rhubarb_gogs#FugitiveUrl(...) abort
     let commit = opts.commit
   endif
   if get(opts, 'type', '') ==# 'tree' || opts.path =~# '/$'
-    let url = substitute(root . '/src/' . commit . '/' . path, '/$', '', 'g')
+    let url = substitute(root . '/blob/' . commit . '/' . path, '/$', '', 'g')
   elseif get(opts, 'type', '') ==# 'blob' || opts.path =~# '[^/]$'
     let escaped_commit = substitute(commit, '#', '%23', 'g')
-    let url = root . '/src/' . escaped_commit . '/' . path
+    let url = root . '/blob/' . escaped_commit . '/' . path
     if get(opts, 'line2') && opts.line1 == opts.line2
       let url .= '#L' . opts.line1
     elseif get(opts, 'line2')
@@ -286,8 +286,8 @@ function! rhubarb_gogs#FugitiveUrl(...) abort
   return url
 endfunction
 
-function! rhubarb_gogs#fugitive_url(...) abort
-  return call('rhubarb_gogs#FugitiveUrl', a:000)
+function! rhubarb_gitlab#fugitive_url(...) abort
+  return call('rhubarb_gitlab#FugitiveUrl', a:000)
 endfunction
 
 " Section: End
